@@ -130,7 +130,7 @@ dependencies {
     // noinspection GradleDynamicVersion
     api 'com.facebook.react:react-native:+'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation files('src/lib/stario10.aar')
+    compileOnly files('src/lib/stario10.aar')
     def coroutines_version = '1.6.4' // Version of the library for Kotlin coroutines (async, await)
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version" // Library for Kotlin coroutines (async, await)
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
