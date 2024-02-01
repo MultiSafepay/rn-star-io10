@@ -1,4 +1,11 @@
 {
   "name": "example",
-  "displayName": "example"
+  "displayName": "example",
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": ""
+      }
+    }
+  }
 }
