@@ -77,7 +77,7 @@ class StarIO10ValueConverter {
             "TSP100IIILAN" to StarPrinterModel.TSP100IIILAN,
             "TSP100IIIBI" to StarPrinterModel.TSP100IIIBI,
             "TSP100IIIU" to StarPrinterModel.TSP100IIIU,
-            "TSP100IV_SK" to StarPrinterModel.TSP100IV_SK,
+            // "TSP100IV_SK" to StarPrinterModel.TSP100IV_SK, // Not supported by StarIO10 1.3.x.
             "TSP100IV" to StarPrinterModel.TSP100IV,
             "mPOP" to StarPrinterModel.mPOP,
             "mC_Print2" to StarPrinterModel.mC_Print2,

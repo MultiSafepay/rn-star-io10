@@ -10,7 +10,7 @@
 
 # react-native-star-io10
 
-`react-native-star-io10` is a library for supporting application development for Star Micronics devices.
+`react-native-star-io10` is a library for supporting application development for Star Micronics devices (Fork 1.3.x)
 
 This library is included in StarXpand SDK.
 
@@ -25,7 +25,7 @@ Documentation includes an overview of the SDK, how to build a sample application
 | Platform | Version | Arch |
 | --- | --- | --- |
 | iOS | iOS 13.0 or later | Device: arm64<br> Simulator: x86_64, arm64 |
-| Android | Android 9.0 or later | arm64-v8a, armeabi-v7a, x86, x86_64 |
+| Android | Android 6.0 or later | arm64-v8a, armeabi-v7a, x86, x86_64 |
 | Windows | Windows 11 / Windows 10 22H2 | x86, x64 |
 
 ## Installation
