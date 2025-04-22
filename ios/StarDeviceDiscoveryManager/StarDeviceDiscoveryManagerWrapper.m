@@ -15,6 +15,9 @@
 
 
 @implementation StarDeviceDiscoveryManagerWrapper
+{
+    bool hasListeners;
+}
 
 - (instancetype)init
 {
@@ -117,7 +120,27 @@ RCT_REMAP_METHOD(stopDiscovery,
     resolve(nil);
 }
 
+
+
+// Will be called when this module's first listener is added.
+-(void)startObserving {
+    hasListeners = YES;
+    NSLog(@"StarDeviceDiscoveryManagerWrapper startObserving");
+  // Set up any upstream listeners or background tasks as necessary
+}
+
+// Will be called when this module's last listener is removed, or on dealloc.
+-(void)stopObserving {
+    hasListeners = NO;
+    NSLog(@"StarDeviceDiscoveryManagerWrapper stopObserving");
+   // Remove upstream listeners, stop unnecessary background tasks
+}
+
+
 #pragma mark - Event
+
+
+
 
 - (NSArray<NSString *> *)supportedEvents {
     return @[kNamePrinterFound,
@@ -128,17 +151,49 @@ RCT_REMAP_METHOD(stopDiscovery,
     NSString* objID = [_objManager getExsitingIdentifier:manager];
     
     if (objID) {
+        NSLog(@"StarDeviceDiscoveryManagerWrapper found object, has listener %s", hasListeners? "true" : "false");
+        NSLog(@"StarDeviceDiscoveryManagerWrapper objID %@", objID);
+
+
         NSString *interfaceTypeString = [StarIO10ValueConverter toStringFromInterfaceType:printer.connectionSettings.interfaceType];
         NSString *modelString = [StarIO10ValueConverter toStringFromStarPrinterModel:printer.information.model];
         NSString *emulationString = [StarIO10ValueConverter toStringFromStarPrinterEmulation:printer.information.emulation];
 
-        [self sendEventWithName:kNamePrinterFound body:@{kKeyIdentifier: objID,
-                                                         kKeyInterfaceType: interfaceTypeString,
-                                                         kKeyConnectionIdentifier: printer.connectionSettings.identifier,
-                                                         kKeyModel: modelString,
-                                                         kKeyEmulation: emulationString,
-                                                         kKeyReserved: [StarIO10ValueConverter toJSNamingDictionary:printer.information.reserved]
-        }];
+        
+        NSLog(@"StarDeviceDiscoveryManagerWrapper interfaceTypeString %@", interfaceTypeString);
+        NSLog(@"StarDeviceDiscoveryManagerWrapper modelString %@", modelString);
+        NSLog(@"StarDeviceDiscoveryManagerWrapper emulationString %@", emulationString);
+        NSLog(@"StarDeviceDiscoveryManagerWrapper printer description %@", printer.description);
+        NSLog(@"StarDeviceDiscoveryManagerWrapper connection identifier %@", printer.connectionSettings.identifier);
+        
+        
+        NSLog(@"StarDeviceDiscoveryManagerWrapper kNamePrinterFound %@", kNamePrinterFound);
+        NSLog(@"StarDeviceDiscoveryManagerWrapper kNameDiscoveryFinished %@", kNameDiscoveryFinished);
+
+        
+        NSLog(@"Sending event: %@", kNamePrinterFound);
+        dispatch_async(dispatch_get_main_queue(), ^{
+
+            [self sendEventWithName:kNamePrinterFound body:@{kKeyIdentifier: objID,
+                                                             kKeyInterfaceType: interfaceTypeString,
+                                                             kKeyConnectionIdentifier: printer.connectionSettings.identifier,
+                                                             kKeyModel: modelString,
+                                                             kKeyEmulation: emulationString,
+                                                             kKeyReserved: [StarIO10ValueConverter toJSNamingDictionary:printer.information.reserved]
+            }];
+            
+            NSLog(@"StarDeviceDiscoveryManagerWrapper Sending event: %@ with body: %@", kNamePrinterFound, @{
+                kKeyIdentifier: objID,
+                kKeyInterfaceType: interfaceTypeString,
+                kKeyConnectionIdentifier: printer.connectionSettings.identifier,
+                kKeyModel: modelString,
+                kKeyEmulation: emulationString,
+                kKeyReserved: [StarIO10ValueConverter toJSNamingDictionary:printer.information.reserved]
+            });
+        });
+    } else {
+        NSLog(@"StarDeviceDiscoveryManagerWrapper Fail to get object, has listener %s", hasListeners? "true" : "false");
+
     }
 }
 
@@ -146,7 +201,11 @@ RCT_REMAP_METHOD(stopDiscovery,
     NSString* objID = [_objManager getExsitingIdentifier:manager];
     
     if (objID) {
-        [self sendEventWithName:kNameDiscoveryFinished body:@{kKeyIdentifier: objID}];
+        NSLog(@"StarDeviceDiscoveryManagerWrapper managerDidFinishDiscovery, has listener %s", hasListeners? "true" : "false");
+     [self sendEventWithName:kNameDiscoveryFinished body:@{kKeyIdentifier: objID}];
+    } else {
+        NSLog(@"StarDeviceDiscoveryManagerWrapper managerDidFinishDiscovery else, has listener %s", hasListeners? "true" : "false");
+
     }
 }
 

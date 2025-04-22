@@ -211,12 +211,14 @@ const App = () => {
       state.interfaceType,
     ]);
 
-    // manager.discoveryTime = 5000;
+    manager.discoveryTime = 2000;
+    let hasStoped = false;
 
-    // manager.onDiscoveryFinished = async () => {
-    //   console.log(`stopDiscovery`);
-    //   setIsScanning(false);
-    // };
+    manager.onDiscoveryFinished = async () => {
+      console.log(`stopDiscovery`);
+      hasStoped = true;
+      setIsScanning(false);
+    };
 
     manager.onPrinterFound = async p => {
       console.log(`onPrinterFound`, p);
@@ -233,11 +235,14 @@ const App = () => {
       setIsScanning(false);
       console.log(`Error: ${String(error)}`);
     });
+    console.log('_nativeObject', manager._nativeObject);
     setTimeout(() => {
-      console.log(`stopDiscovery`);
-      setIsScanning(false);
-      manager.stopDiscovery();
-    }, 5000);
+      console.log(`force stopDiscovery`, hasStoped);
+      if (!hasStoped) {
+        setIsScanning(false);
+        manager.stopDiscovery();
+      }
+    }, manager.discoveryTime + 2000);
     setIsScanning(true);
   };
 
